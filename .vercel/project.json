@@ -1,0 +1,10 @@
+{
+    "name": "Whostler WebSite",
+    "framework": "nextjs",
+    "build": {
+      "env": {
+        "CUSTOM_ENV_VARIABLE": "value"
+      }
+    }
+  }
+  
