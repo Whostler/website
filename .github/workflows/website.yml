@@ -22,7 +22,7 @@ jobs:
         env:
           RSYNC_OPTIONS: '-avz --delete'
           DEPLOY_PATH: '/opt/website/' # Replace with your server path
-          SERVER_USER: 'www-data' # Replace with your server username
+          SERVER_USER: 'root' # Replace with your server username
           SERVER_HOST: '177.92.144.247' # Replace with your server hostname or IP
         run: |
           rsync $RSYNC_OPTIONS ./ ${{ env.SERVER_USER }}@${{ env.SERVER_HOST }}:${{ env.DEPLOY_PATH }}
