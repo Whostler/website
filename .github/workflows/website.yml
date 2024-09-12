@@ -1,8 +1,14 @@
 # .github/workflows/ci.yml
 name: Whostler Website Deploy
 
-on: push
-name: Deploying WordPress Site
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      
 jobs:
   deploy:
     name: Deploy
