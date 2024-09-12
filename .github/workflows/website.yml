@@ -1,21 +1,35 @@
-# .github/workflows/ci.yml
-name: Whostler Website Deploy
+name: Deploy WordPress DEV
 
 on:
   push:
     branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
+      - develop  # Replace 'main' with your preferred branch if necessary
 
 jobs:
-  deploy:
-    name: Deploy
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Deploy
-        uses: rtCamp/action-deploy-wordpress@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Sync WordPress Files to Server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          RSYNC_OPTIONS: '-avz --delete'
+          DEPLOY_PATH: '/opt/website/' # Replace with your server path
+          SERVER_USER: 'www-data' # Replace with your server username
+          SERVER_HOST: '177.92.144.247' # Replace with your server hostname or IP
+        run: |
+          rsync $RSYNC_OPTIONS ./ ${{ env.SERVER_USER }}@${{ env.SERVER_HOST }}:${{ env.DEPLOY_PATH }}
+
+      - name: Run WordPress Deployment Script
+        env:
+          SERVER_USER: 'www-data' # Replace with your server username
+          SERVER_HOST: '177.92.144.247' # Replace with your server hostname or IP
+        run: |
+          ssh ${{ env.SERVER_USER }}@${{ env.SERVER_HOST }} "cd ${{ env.DEPLOY_PATH }} && ./deploy.sh"
