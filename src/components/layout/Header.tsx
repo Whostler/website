@@ -54,7 +54,7 @@ export function Header() {
     <header className="site-header">
       <div className="container nav-shell">
         <a className="brand" href="#top" aria-label="Whostler Services home">
-          <img src="/whostler-logo.png" alt="Whostler Services" />
+          <img src="/whostler_logo_neg.png" alt="Whostler Services" />
         </a>
         <button
           ref={buttonRef}

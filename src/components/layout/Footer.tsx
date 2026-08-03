@@ -6,7 +6,7 @@ export function Footer() {
     <footer>
       <div className="container footer-main">
         <div>
-          <img src="/whostler-logo.png" alt="Whostler Services" />
+          <img src="/whostler_logo_greyscale.png" alt="Whostler Services" />
           <p>{siteConfig.footerStatement}</p>
         </div>
         <div>
