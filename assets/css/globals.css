@@ -772,6 +772,7 @@ footer {
 .footer-main img {
   width: 145px;
   height: auto;
+  opacity: 0.25;
 }
 .footer-main p {
   max-width: 340px;
