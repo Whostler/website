@@ -1,9 +1,0 @@
-node_modules/
-.env
-.next
-out
-.DS_Store
-
-
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
