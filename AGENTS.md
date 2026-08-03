@@ -5,9 +5,10 @@ Guidance for AI agents and contributors working in this repository.
 ## What this repository is
 
 The Whostler Services public website workspace. It currently holds the base
-Markdown documentation structure and repository configuration (GitHub Actions,
-Codacy, OSV scanner). No application scaffold exists yet; the website build is
-specified in `.instructions/website-execution.instructions.md`.
+Markdown documentation structure and a Vite + React + TypeScript institutional
+website (single-page app with CSS design tokens), plus repository configuration
+(GitHub Actions, Codacy, OSV scanner). The website build is specified in
+`.instructions/website-execution.instructions.md`.
 
 ## Repository structure
 
@@ -18,6 +19,9 @@ specified in `.instructions/website-execution.instructions.md`.
 - `.rag/` — governed retrieval surface (source index, baseline)
 - `.github/` — CI and repository configuration
 - `.codacy/` — generated security and quality rules
+- `src/` — website source (components, config, content, lib, styles)
+- `public/` — static assets (logo, favicon, robots.txt, sitemap.xml)
+- `docs/design/` — UI reference model for the visual system
 
 ## Normative sources
 
@@ -45,10 +49,14 @@ specified in `.instructions/website-execution.instructions.md`.
 - Create one scoped local commit per change. Do not push automatically.
 - Preflight before creating or editing `AGENTS.md`; never overwrite an existing file.
 - When changing orientation files, update `.rag/source-index.md` together.
+- Website copy lives in `src/content/` and `src/config/site.ts`; edit content
+  there, not inside components.
 
 ## Validation
 
 - `git diff --check` for whitespace errors.
 - Internal Markdown links must resolve.
-- No linter or build pipeline is configured yet, so content is validated by
-  review until tooling exists. State this honestly in results.
+- Website validation: `pnpm lint`, `pnpm typecheck`, `pnpm build`.
+- The design system lives in `src/styles/globals.css`; keep new UI consistent
+  with its tokens and the `docs/design/` reference.
+- Markdown content has no linter yet; it is validated by review.

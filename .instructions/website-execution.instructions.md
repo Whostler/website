@@ -19,7 +19,20 @@ Build or refactor the institutional website inside `./website`. The result must 
 - Never add real credentials; use environment variables for configurable or sensitive values; create or update `.env.example`.
 - Run all available validation commands before finishing; fix errors introduced by the implementation.
 - Document unresolved placeholders or external dependencies; do not simulate integrations that do not exist.
-- If the workspace is empty, initialize a modern TypeScript web application with a stable, well-supported framework (Next.js App Router recommended).
+- If the workspace is empty, initialize a modern TypeScript web application with a stable, well-supported framework.
+
+Framework decision (2026-08-03): this workspace uses **Vite + React 19 + TypeScript**.
+Next.js was evaluated and rejected because of slow development/build feedback for this
+single-page institutional site. Do not reintroduce Next.js without a new decision.
+
+Recommended baseline:
+
+* Vite (dev server and production build)
+* React 19
+* TypeScript (strict)
+* Plain CSS with design tokens (no CSS framework)
+* ESLint (`@eslint/js` + `typescript-eslint` + `eslint-plugin-react-hooks`)
+* Static metadata in `index.html`; env-driven values via `VITE_*` variables
 
 ## Product objective
 
@@ -85,6 +98,15 @@ Use the existing test framework when configured. At minimum run static checks (f
 ## Environment variables
 
 Only those required by the implementation. Server-side secrets (e.g., `CONTACT_PROVIDER_API_KEY`) must never be exposed through public environment variables.
+
+Client-side variables used by this implementation (see `.env.example`):
+
+* `VITE_SITE_URL` — public site URL for canonical and Open Graph references
+* `VITE_CONTACT_EMAIL` — contact placeholder shown in the form fallback and footer
+* `VITE_CONTACT_ENDPOINT` — optional delivery endpoint; empty = documented mailto fallback (never fake delivery)
+* `VITE_GITHUB_URL`, `VITE_LINKEDIN_URL` — optional social links (empty hides them)
+
+`VITE_*` variables are embedded in the client bundle, so never place secrets there.
 
 ## Acceptance criteria
 
