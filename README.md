@@ -75,9 +75,11 @@ Copy `.env.example` to `.env.local` and adjust values. See `.env.example` for th
 ├── .rag/                      # Governed retrieval surface (source index, baseline)
 ├── public/
 │   ├── whostler-logo.png      # Brand logo (from the UI reference)
-│   ├── favicon.svg
+│   ├── favicon.png
 │   ├── robots.txt
 │   └── sitemap.xml
+├── assets/
+│   └── css/globals.css        # Design tokens and component styles
 ├── src/
 │   ├── components/
 │   │   ├── forms/             # ContactForm (validation, honest submission)
@@ -86,7 +88,6 @@ Copy `.env.example` to `.env.local` and adjust values. See `.env.example` for th
 │   ├── config/site.ts         # Central site and contact configuration
 │   ├── content/               # Typed institutional content
 │   ├── lib/validation/        # Contact validation shared with the form
-│   ├── styles/globals.css     # Design tokens and component styles
 │   └── types/                 # Content types
 ├── index.html                 # Metadata, fonts, app mount
 └── .env.example
