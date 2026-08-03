@@ -1,0 +1,34 @@
+# Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+
+# dependencies
+/node_modules
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env files
+.env*
+!.env.example
+
+# UI reference model (docs/design) — keep private hosting config and bundled
+# archive out of this public repository; the rest of the reference is tracked.
+docs/design/**/.openai/
+docs/design/**/*.zip
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
