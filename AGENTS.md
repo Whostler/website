@@ -57,6 +57,6 @@ website (single-page app with CSS design tokens), plus repository configuration
 - `git diff --check` for whitespace errors.
 - Internal Markdown links must resolve.
 - Website validation: `pnpm lint`, `pnpm typecheck`, `pnpm build`.
-- The design system lives in `src/styles/globals.css`; keep new UI consistent
+- The design system lives in `assets/css/globals.css`; keep new UI consistent
   with its tokens and the `docs/design/` reference.
 - Markdown content has no linter yet; it is validated by review.
