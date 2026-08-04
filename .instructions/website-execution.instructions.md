@@ -58,6 +58,8 @@ Primary navigation: Services, Technologies, Approach, About, Contact. A single-p
 
 Preferred order: existing backend endpoint; server action or API route; configurable third-party provider; mailto fallback; documented non-functional placeholder. Never claim a message was delivered unless the provider confirms delivery or acceptance. Validate inputs server-side, normalize input, apply rate limiting and spam mitigation, protect provider credentials, return structured errors, and limit field lengths. Centralize integration configuration and document required variables in `.env.example`.
 
+Vercel transpiles `api/` functions per file as ESM (`"type": "module"`): relative imports must use explicit `.js` extensions (e.g. `"../src/lib/validation/contact.js"`), otherwise the deployed function fails at runtime with `ERR_MODULE_NOT_FOUND`.
+
 ## Visual design
 
 Modern, technical, minimal, premium but restrained, appropriate for infrastructure and engineering services. Strong typography, clear hierarchy, generous spacing, consistent grids, subtle depth, high contrast. Visual language: abstract nodes, infrastructure diagrams, API paths, data flows, grid systems, technical line illustrations. Avoid stock photography, excessive neon/gradients/glassmorphism, heavy animation, fake dashboards, and distracting fake code. Define semantic color tokens with accessible contrast; one primary sans-serif family with optional monospace for technical labels; consistent spacing scale (4, 8, 12, 16, 24, 32, 48, 64, 96, 128); maximum content width 1120–1280px; service grids adapt 1/2/3–4 columns.

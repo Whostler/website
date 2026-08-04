@@ -110,7 +110,7 @@ The contact form validates on the client (`src/lib/validation/contact.ts`) and s
 
 - With `VITE_CONTACT_ENDPOINT` empty, the form shows a clear "not configured" state with a mailto fallback — it never fakes a successful submission.
 - With `VITE_CONTACT_ENDPOINT` set (default `/api/contact`), the form POSTs JSON to that endpoint and shows success only when the endpoint returns `2xx`.
-- The endpoint is the Vercel serverless function in `api/contact.ts`, deployed alongside the frontend. It re-validates the payload with the same validator used by the client, rejects oversized bodies (32 KB), rate-limits per IP (5 per 10 minutes, per instance), checks the honeypot, and delivers the inquiry by email through Resend. It responds `2xx` only when Resend confirms acceptance; missing server configuration returns `503` and the client shows an honest error state.
+- The endpoint is the Vercel serverless function in `api/contact.ts`, deployed alongside the frontend. It re-validates the payload with the same validator used by the client, rejects oversized bodies (32 KB), rate-limits per IP (5 per 10 minutes, per instance), checks the honeypot, and delivers the inquiry by email through Resend. It responds `2xx` only when Resend confirms acceptance; missing server configuration returns `503` and the client shows the same "not configured" mailto fallback.
 - The form includes required-field and email validation, a honeypot spam check, and preserves input on failure.
 
 Official contact details (email, phone, address, social profiles) are placeholders in `src/config/site.ts` until provided.
@@ -125,7 +125,7 @@ pnpm build
 ```
 
 1. Push the repository to GitHub and import it in Vercel (Root Directory: repo root). Vercel detects Vite for the frontend and serves `api/contact.ts` as a serverless function; no `vercel.json` is required.
-2. In the Vercel project, set Environment Variables: the `VITE_*` values used by the build plus the server-side `RESEND_API_KEY` (from https://resend.com/api-keys), `CONTACT_RECIPIENT_EMAIL` (the inbox that receives inquiries), and `CONTACT_FROM_EMAIL` (a verified sender for the domain, e.g. `Whostler Services <contact@whostler.country>`).
+2. In the Vercel project, set Environment Variables: the `VITE_*` values used by the build plus the server-side `RESEND_API_KEY` (from https://resend.com/api-keys), `CONTACT_RECIPIENT_EMAIL` (the inbox that receives inquiries), and `CONTACT_FROM_EMAIL` (a verified sender for the domain, e.g. `Whostler Services <contact@whostler.country>`). `VITE_*` values are inlined into the client bundle at build time, so after adding or changing them create a new deployment to pick them up.
 3. Deploy. The form on the live site posts to `/api/contact` on the same origin.
 
 For local development with the function, use `vercel dev` (serves the Vite app and `api/` together). Plain `vite dev` does not serve `/api/contact`; leave `VITE_CONTACT_ENDPOINT` empty locally to keep the honest mailto fallback. The existing GitHub Actions in `.github/workflows/` are pre-existing repository configuration and were not modified by this implementation.

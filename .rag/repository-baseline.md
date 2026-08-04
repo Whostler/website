@@ -15,6 +15,11 @@ deployed with `RESEND_API_KEY`/`CONTACT_RECIPIENT_EMAIL` set. Validation
 available: `pnpm lint`, `pnpm typecheck`, `pnpm build`. Markdown content has no
 linter.
 
+Vercel transpiles `api/` functions per file as ESM (`"type": "module"`), so
+relative imports in `api/` must use explicit `.js` extensions (e.g.
+`"../src/lib/validation/contact.js"`); extensionless imports fail at runtime
+with `ERR_MODULE_NOT_FOUND` (fixed 2026-08-04).
+
 Framework decision (2026-08-03): Vite + React 19 + TypeScript; Next.js evaluated
 and rejected for slow development/build feedback. Visual reference (read-only):
 `docs/design/whostler-services/`; its `.openai/` hosting config and the bundled

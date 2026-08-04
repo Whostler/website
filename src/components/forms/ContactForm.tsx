@@ -101,6 +101,9 @@ export function ContactForm() {
       if (response.ok) {
         setValues(INITIAL_VALUES);
         setStatus("success");
+      } else if (response.status === 503) {
+        // Server-side delivery is not configured (missing Resend variables).
+        setStatus("unconfigured");
       } else {
         setStatus("error");
       }

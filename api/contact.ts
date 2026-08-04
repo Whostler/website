@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { validateContactPayload } from "../src/lib/validation/contact";
+import { validateContactPayload } from "../src/lib/validation/contact.js";
 
 const MAX_BODY_BYTES = 32 * 1024;
 const RESEND_API_URL = "https://api.resend.com/emails";

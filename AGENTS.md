@@ -22,7 +22,8 @@ website (single-page app with CSS design tokens), plus repository configuration
 - `src/` — website source (components, config, content, lib, styles)
 - `public/` — static assets (logo, favicon, robots.txt, sitemap.xml)
 - `docs/design/` — UI reference model for the visual system
-- `api/` — Vercel serverless function for contact delivery (Resend)
+- `api/` — Vercel serverless function for contact delivery (Resend); relative
+  imports must use explicit `.js` extensions (functions run as ESM per file)
 
 ## Normative sources
 
