@@ -60,11 +60,11 @@ Copy `.env.example` to `.env.local` and adjust values. See `.env.example` for th
 | --- | --- |
 | `VITE_SITE_URL` | Public site URL used for canonical and Open Graph references |
 | `VITE_CONTACT_EMAIL` | Contact placeholder shown in the form fallback and footer |
-| `VITE_CONTACT_ENDPOINT` | Optional delivery endpoint; empty = documented mailto fallback (no fake delivery) |
+| `VITE_CONTACT_ENDPOINT` | Delivery endpoint (`/api/contact` on Vercel); empty = documented mailto fallback (no fake delivery) |
 | `VITE_GITHUB_URL` | Optional GitHub link in the footer (empty hides it) |
 | `VITE_LINKEDIN_URL` | Optional LinkedIn link in the footer (empty hides it) |
 
-`VITE_` variables are embedded in the client bundle, so never place secrets there. Any real contact delivery backend must be server-side or an external service configured by you.
+`VITE_` variables are embedded in the client bundle, so never place secrets there. Server-side variables for the contact function (`RESEND_API_KEY`, `CONTACT_RECIPIENT_EMAIL`, `CONTACT_FROM_EMAIL`) are defined in `.env.example` and must be set in the Vercel project's Environment Variables — never as `VITE_*`.
 
 ## Directory Structure
 
@@ -109,26 +109,31 @@ Site-wide metadata lives in `index.html`. Contact placeholders are centralized i
 The contact form validates on the client (`src/lib/validation/contact.ts`) and submits only when a delivery endpoint is configured:
 
 - With `VITE_CONTACT_ENDPOINT` empty, the form shows a clear "not configured" state with a mailto fallback — it never fakes a successful submission.
-- With `VITE_CONTACT_ENDPOINT` set, the form POSTs JSON to that endpoint and shows success only when the endpoint returns `2xx`. The endpoint must validate and protect the data server-side; the client bundle cannot hold secrets.
+- With `VITE_CONTACT_ENDPOINT` set (default `/api/contact`), the form POSTs JSON to that endpoint and shows success only when the endpoint returns `2xx`.
+- The endpoint is the Vercel serverless function in `api/contact.ts`, deployed alongside the frontend. It re-validates the payload with the same validator used by the client, rejects oversized bodies (32 KB), rate-limits per IP (5 per 10 minutes, per instance), checks the honeypot, and delivers the inquiry by email through Resend. It responds `2xx` only when Resend confirms acceptance; missing server configuration returns `503` and the client shows an honest error state.
 - The form includes required-field and email validation, a honeypot spam check, and preserves input on failure.
 
 Official contact details (email, phone, address, social profiles) are placeholders in `src/config/site.ts` until provided.
 
 ## Deployment
 
-This is a static single-page application:
+This is a static single-page application with one serverless function, deployed to Vercel:
 
 ```bash
 pnpm install
 pnpm build
 ```
 
-Deploy the `dist/` directory to any static host (Vercel, Cloudflare Pages, Netlify, a Linux web server, etc.) with a fallback to `index.html` for unknown routes. Set the `VITE_*` variables at build time. The existing GitHub Actions in `.github/workflows/` are pre-existing repository configuration and were not modified by this implementation.
+1. Push the repository to GitHub and import it in Vercel (Root Directory: repo root). Vercel detects Vite for the frontend and serves `api/contact.ts` as a serverless function; no `vercel.json` is required.
+2. In the Vercel project, set Environment Variables: the `VITE_*` values used by the build plus the server-side `RESEND_API_KEY` (from https://resend.com/api-keys), `CONTACT_RECIPIENT_EMAIL` (the inbox that receives inquiries), and `CONTACT_FROM_EMAIL` (a verified sender for the domain, e.g. `Whostler Services <contact@whostler.country>`).
+3. Deploy. The form on the live site posts to `/api/contact` on the same origin.
+
+For local development with the function, use `vercel dev` (serves the Vite app and `api/` together). Plain `vite dev` does not serve `/api/contact`; leave `VITE_CONTACT_ENDPOINT` empty locally to keep the honest mailto fallback. The existing GitHub Actions in `.github/workflows/` are pre-existing repository configuration and were not modified by this implementation.
 
 ## Placeholders and Known Limitations
 
 - Official domain, email, phone, address, GitHub, and LinkedIn values are placeholders.
-- No contact delivery backend is configured; the form intentionally does not fake delivery.
+- Contact delivery works once the Vercel function is deployed with `RESEND_API_KEY` and `CONTACT_RECIPIENT_EMAIL` set; until then the form intentionally does not fake delivery. Rate limiting is per function instance, not a global quota.
 - The site is a client-side rendered SPA: SEO relies on the static metadata in `index.html` plus `robots.txt`/`sitemap.xml`. For stronger SEO, add a prerendering step or host the built HTML with injected metadata.
 - No privacy policy or legal pages yet.
 - No unit/E2E test framework is installed; validation is via lint, type check, and production build.
