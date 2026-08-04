@@ -1,1 +1,1 @@
-/opt/Whostler/website/docs/design/whostler-services/app/layout.tsx
+/opt/Whostler/website/src/config/site.ts
